@@ -1,0 +1,124 @@
+---
+schemaVersion: 1.0
+team: {{TEAM_NAME}}
+updated: {{DATE}}
+defaults:
+  hoursPerDay: 6
+  capacityPercent: 80
+  workingDaysPerWeek: 5
+roleAbbreviations:
+  BE: backend
+  FE: frontend
+  FS: fullstack
+  QA: testing
+  DO: devops
+setupDefaults:                # starting values /SetupWorkflow writes for new
+  velocityBySeniority:        # members; refine from actuals over time
+    junior: 1.5
+    mid: 1.0
+    senior: 0.8
+    staff: 0.7
+  startingSkills:
+    primary: 3
+    other: 2
+estimation:
+  proficiencyMultipliers:     # out-of-area estimate adjustment by skill level
+    "4-5": 1.0                # no adjustment
+    "3": 1.25
+    "2": 1.5
+    "1": do-not-assign        # flag for reassignment or pairing instead
+---
+
+# Team Roster
+
+Source of truth for planning and estimation. Every planning command
+(/CyclePlan, /PRDFeasibility, /Breakdown, /PRDSequence) loads this file.
+Update it whenever someone joins, leaves, changes role, or demonstrably
+levels up. Log every change in the Change Log at the bottom.
+
+**What does each field mean and what should I update?** See README.md in
+this folder — it explains every setting (capacity, velocity, proficiency,
+descriptions), the math behind it, and the update recipe for each kind of
+team change.
+
+<!-- The three members below are EXAMPLES shipped with the template to
+     show a senior specialist, a partially-allocated mid, and a junior
+     generalist. Replace them with your real team: copy a block per
+     member and delete every example. /SetupWorkflow does this for you
+     interactively. -->
+
+## Alice (example)
+
+```yaml
+name: Alice                   # the name used in planning commands
+role: backend                 # primary role; must map to a roleAbbreviation
+seniority: senior             # junior | mid | senior | staff
+velocityFactor: 0.8           # 1.0 = solid mid-level baseline in primary area
+                              # 0.8 = 20% faster, 1.5 = 50% slower
+allocation: 100               # % of working time available to this team
+# hoursPerDay: 6              # optional per-person override of defaults
+skills:                       # proficiency 1-5 per work area; areas must
+  backend: 5                  # match /Breakdown area labels
+  frontend: 2
+  database: 4
+  infrastructure: 3
+  testing: 3
+```
+
+Alice is the senior backend engineer and owns the API layer and database
+migrations. Strongest on service architecture and performance work. Avoid
+assigning her deep frontend styling tasks. Provides review coverage for
+all backend changes; key-person risk on anything payments-related.
+
+## Ben (example)
+
+```yaml
+name: Ben
+role: frontend
+seniority: mid
+velocityFactor: 1.0
+allocation: 80                # 20% of his time goes to another team
+skills:
+  backend: 2
+  frontend: 4
+  database: 2
+  infrastructure: 2
+  testing: 3
+```
+
+Ben is a mid-level frontend engineer working across the component library
+and app screens. Solid on React and state management. At 80% allocation
+to this team; plan his capacity accordingly.
+
+## Carla (example)
+
+```yaml
+name: Carla
+role: fullstack
+seniority: junior
+velocityFactor: 1.5
+allocation: 100
+skills:
+  backend: 3
+  frontend: 3
+  database: 2
+  infrastructure: 1
+  testing: 3
+```
+
+Carla is a junior fullstack engineer ramping up across the stack. Give
+her well-scoped items with clear acceptance criteria. Needs review on
+database changes; do not assign infrastructure work solo.
+
+<!-- Prose description guidance: 2-6 sentences per member. What this
+     person does, what they are strongest at, what to avoid assigning
+     them, review overhead they need or provide, and any key-person
+     risks. Planning commands read this verbatim as estimation context.
+     Keep it professional and capability-focused: no compensation or
+     performance-review language. -->
+
+## Change Log
+
+| Date | Change | Reason |
+| --- | --- | --- |
+| {{DATE}} | Initial roster (template examples) | Setup |
